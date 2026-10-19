@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sunishka ❤️</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      position: relative;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #ffc1dc, #ff9ac7, #ffd6e7);
+    }
+
+    /* Main stage */
+    .stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Welcome Modal Popup */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 154, 199, 0.6);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity 0.5s ease;
+    }
+
+    .modal-card {
+      background: white;
+      padding: 30px 25px;
+      border-radius: 20px;
+      width: 85%;
+      max-width: 340px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(180, 20, 80, 0.25);
+      animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .modal-card h2 {
+      color: #ff1744;
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .modal-card p {
+      color: #666;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .gift-btn {
+      background: linear-gradient(135deg, #ff1744, #ff4081);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 23, 68, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+    }
+
+    .gift-btn:active {
+      transform: scale(0.96);
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Heart balloon container */
+    .balloon {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 280px;
+      height: 280px;
+      transform: translate(-50%, 100vh) scale(0.5);
+      opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 2;
+      visibility: hidden;
+    }
+
+    /* Actual heart shape */
+    .balloon::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--balloon-color, #ff2878);
+      clip-path: path(
+        "M 140 260
+         C 115 235, 15 165, 15 95
+         C 15 30, 90 10, 140 75
+         C 190 10, 265 30, 265 95
+         C 265 165, 165 235, 140 260 Z"
+      );
+      filter: drop-shadow(0 8px 12px rgba(120, 0, 50, 0.2));
+    }
+
+    /* Balloon message & Controls wrapper */
+    .balloon-content {
+      position: relative;
+      z-index: 1;
+      width: 78%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: -10px;
+    }
+
+    .message {
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+      text-shadow: 1px 2px 4px rgba(120, 0, 40, 0.25);
+    }
+
+    /* Step Navigation Button inside balloon */
+    .next-btn {
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      color: white;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: bold;
+      border-radius: 20px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: background 0.1s ease;
+    }
+
+    .next-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Balloon string */
+    .string {
+      position: absolute;
+      left: 50%;
+      top: 230px;
+      height: 90px;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.9);
+      transform-origin: top;
+      z-index: -1;
+    }
+
+    /* Balloon entrance animation */
+    .balloon.show {
+      visibility: visible;
+      animation: balloonEnter 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes balloonEnter {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 60vh) scale(0.5);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    /* Floating decorative hearts */
+    .floating-heart {
+      position: absolute;
+      bottom: -45px;
+      width: var(--size, 24px);
+      height: var(--size, 24px);
+      background: var(--heart-color, #ff1744);
+      transform: rotate(-45deg);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+      animation: floatUp var(--duration, 6s) linear forwards;
+    }
+
+    .floating-heart::before,
+    .floating-heart::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      border-radius: 50%;
+    }
+
+    .floating-heart::before {
+      top: -50%;
+      left: 0;
+    }
+
+    .floating-heart::after {
+      top: 0;
+      left: 50%;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(-45deg) scale(0.7);
+        opacity: 0;
+      }
+
+      12% {
+        opacity: 0.95;
+      }
+
+      100% {
+        transform: translateY(-120vh) rotate(315deg) scale(1.15);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive size for phones */
+    @media (max-width: 400px) {
+      .balloon {
+        width: 250px;
+        height: 250px;
+      }
+
+      .balloon::before {
+        clip-path: path(
+          "M 125 232
+            C 103 210, 13 148, 13 85
+            C 13 27, 80 9, 125 67
+            C 170 9, 237 27, 237 85
+            C 237 148, 147 210, 125 232 Z"
+        );
+      }
+
+      .message {
+        font-size: 18px;
+      }
+
+      .string {
+        top: 210px;
+        height: 75px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="stage">
+
+    <!-- Welcome Popup Modal -->
+    <div class="modal-overlay" id="welcomeModal">
+      <div class="modal-card">
+        <h2>Hello Sunishka! ❤️</h2>
+        <p>You got a little surprise. Tap below to unwrap it!</p>
+        <button class="gift-btn" id="openGiftBtn">Open Your Gift 🎁</button>
+      </div>
+    </div>
+
+    <!-- First heart balloon -->
+    <div class="balloon" id="balloon1" style="--balloon-color: #ff2878;">
+      <div class="string"></div>
+      <div class="balloon-content">
+        <div class="message">
+          Hey, My Love! ❤️<br>
+          You are that person in my life who makes me feel alive and make me feel really special.
+        </div>
+        <button class="next-btn" onclick="nextBalloon()">Next ➔</button>
+      </div>
+    </div>
+
+    <!-- Second heart balloon -->
+    <div class="balloon" id="balloon2" style="--balloon-color: #e83e8c;">
+      <div class="string"></div>
+      <div class="balloon-content">
+        <div class="message">
+          My Beautiful Girl 💖<br>
+          The way you love me, care about me, understand me and value me makes me feel really lucky.
+        </div>
+        <button class="next-btn" onclick="nextBalloon()">Next ➔</button>
+      </div>
+    </div>
+
+    <!-- Third and final heart balloon -->
+    <div class="balloon" id="balloon3" style="--balloon-color: #ff1744;">
+      <div class="string"></div>
+      <div class="balloon-content">
+        <div class="message">
+          I Love You<br>
+          MY FIRST OFFICIAL GIRLFRIEND Sunishka ❤️<br>
+          Forever and Always! 💍
+        </div>
+        <button class="next-btn" onclick="finishBalloons(this)">Finish ✨</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const balloons = [
+      document.getElementById("balloon1"),
+      document.getElementById("balloon2"),
+      document.getElementById("balloon3")
+    ];
+
+    const colors = [
+      "#ff1744", "#ff4f8b", "#e91e63", "#ff80ab", 
+      "#c2185b", "#ff4081", "#ff69b4", "#f50057"
+    ];
+
+    let currentIndex = 0;
+    let isFinishing = false; // Safeguard flag so finish button only fires once instantly
+
+    // Listen to Open Gift button click
+    document.getElementById("openGiftBtn").addEventListener("click", () => {
+      const modal = document.getElementById("welcomeModal");
+      modal.style.opacity = "0";
+      setTimeout(() => {
+        modal.style.display = "none";
+        showBalloon(0);
+      }, 500);
+    });
+
+    function showBalloon(index) {
+      if (index < balloons.length) {
+        balloons[index].classList.add("show");
+      }
+    }
+
+    // Triggered when user clicks "Next" on Balloon 1 or 2
+    function nextBalloon() {
+      const current = balloons[currentIndex];
+      
+      current.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+      current.style.opacity = "0";
+      current.style.transform = "translate(-50%, -60%) scale(0.9)";
+
+      setTimeout(() => {
+        current.classList.remove("show");
+        current.style.transition = "";
+        current.style.opacity = "";
+        current.style.transform = "";
+
+        currentIndex++;
+        showBalloon(currentIndex);
+      }, 400);
+    }
+
+    // Triggered when user clicks "Finish" on the last balloon
+    function finishBalloons(btn) {
+      if (isFinishing) return;
+      isFinishing = true;
+
+      // Instant visual feedback so user knows it was clicked immediately
+      btn.innerText = "Finishing... ✨";
+      btn.style.opacity = "0.7";
+
+      const lastBalloon = balloons[currentIndex];
+
+      // Hold on screen for 1.5 seconds, then fade out and start hearts
+      setTimeout(() => {
+        lastBalloon.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+        lastBalloon.style.opacity = "0";
+        lastBalloon.style.transform = "translate(-50%, -60%) scale(0.9)";
+
+        setTimeout(() => {
+          lastBalloon.classList.remove("show");
+          lastBalloon.style.display = "none";
+
+          // Start the floating hearts stream
+          startFloatingHearts();
+        }, 800);
+      }, 1500); 
+    }
+
+    let heartsStarted = false;
+
+    function createFloatingHeart() {
+      const heart = document.createElement("div");
+      heart.className = "floating-heart";
+
+      const size = 12 + Math.random() * 25;
+      const duration = 4 + Math.random() * 5;
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.setProperty("--size", size + "px");
+      heart.style.setProperty("--duration", duration + "s");
+      heart.style.setProperty(
+        "--heart-color",
+        colors[Math.floor(Math.random() * colors.length)]
+      );
+
+      document.querySelector(".stage").appendChild(heart);
+
+      heart.addEventListener("animationend", () => {
+        heart.remove();
+      }, { once: true });
+    }
+
+    function startFloatingHearts() {
+      if (heartsStarted) return;
+      heartsStarted = true;
+
+      // Create hearts continuously
+      setInterval(createFloatingHeart, 180);
+
+      // Initial burst of hearts
+      for (let i = 0; i < 25; i++) {
+        setTimeout(createFloatingHeart, i * 100);
+      }
+    }
+  </script>
+</body>
+</html>
